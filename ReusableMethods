@@ -1,0 +1,228 @@
+package seleniumTestXero;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.logging.Handler;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import com.relevantcodes.extentreports.ExtentReports;
+import com.relevantcodes.extentreports.ExtentTest;
+import com.relevantcodes.extentreports.LogStatus;
+
+import freemarker.log.Logger;
+
+public class ReusableMetXero {
+	static WebDriver driver;
+	static ExtentTest Logger;
+	static ExtentReports reports;
+	static String reportFolder = "/Users/rupali/Downloads/selenium/report1/";
+
+	// To initialize driver
+	public static void InitializeDriver() throws IOException {
+		System.setProperty("webdriver.chrome.driver", "/Users/rupali/Downloads/Selenium/chromedriver");
+		driver = new ChromeDriver();
+		driver.get("https://www.xero.com/us/");
+		driver.manage().window().maximize();
+	}
+	
+	public static void clickElement(WebElement ele, String ObjectName) {
+		if (ele.isDisplayed()) {
+			ele.click();
+			System.out.println(ObjectName + " has been successfully clicked.");
+		} else {
+			System.out.println(ObjectName + " is not displayed on the webpage.");
+		}
+	}
+
+	public static void enterText(WebElement ele, String textvalue, String ObjectName) {
+		if (ele.isDisplayed()) {
+			ele.sendKeys(textvalue);
+			System.out.println(textvalue + " has been successfully clicked " + ObjectName);
+		} else {
+			System.out.println(ObjectName + " is not displayed on the webpage.");
+		}
+	}
+
+	// to read data from Excel
+	public static String[][] readXlData(String path, String sheetName) throws IOException {
+
+		FileInputStream fs = new FileInputStream(new File(path));
+
+		HSSFWorkbook wb = new HSSFWorkbook(fs);
+
+		HSSFSheet sheet = wb.getSheet(sheetName);
+
+		int rowCount = sheet.getLastRowNum() + 1;
+
+		int colCount = sheet.getRow(0).getLastCellNum();
+
+		String[][] data = new String[rowCount][colCount];
+
+		for (int i = 0; i < rowCount; i++) {
+
+			for (int j = 0; j < colCount; j++) {
+
+				int cellType = sheet.getRow(i).getCell(j).getCellType();
+				
+				if (cellType == HSSFCell.CELL_TYPE_NUMERIC) {
+
+					int val = (int) sheet.getRow(i).getCell(j).getNumericCellValue();
+
+					data[i][j] = String.valueOf(val);
+
+				}
+
+				else
+
+					data[i][j] = sheet.getRow(i).getCell(j).getStringCellValue();
+			}
+		}
+
+		return (data);
+
+	}
+
+	public static void Login() throws IOException, InterruptedException {
+	
+
+	String[][] data = readXlData("/Users/rupali/Downloads/Selenium/xero1.xls", "Sheet1");
+	//String url = data[0][1];
+	String Email = data[1][1];
+	String Password = data[2][1];
+
+//	System.setProperty("webdriver.chrome.driver", "/Users/rupali/Downloads/Selenium/chromedriver");
+//	driver = new ChromeDriver();
+//	driver.get(url);
+//	driver.manage().window().maximize();
+
+	WebElement Log = driver.findElement(By.xpath("//a[@class='btn btn-tertiary-alt global-ceiling-bar-btn']"));
+	clickElement(Log, "Login");
+
+	WebElement EmailAd = driver.findElement(By.xpath("//input[@id='email']"));
+	enterText(EmailAd, Email, "Email");
+
+	Logger.log(LogStatus.INFO, "email entered successfully");
+	WebElement Pwd = driver.findElement(By.xpath("//input[@id='password']"));
+	enterText(Pwd, Password, "Password");
+	Logger.log(LogStatus.INFO, "Password entered successfully");
+
+	WebElement LoginBtn = driver.findElement(By.xpath("//button[@id='submitButton']"));
+	clickElement(LoginBtn, "Login Button");
+	Logger.log(LogStatus.INFO, "Login btn clicked successfully");
+	}
+
+	//To switch to another window- window handling
+	public static void WindowHandler(){
+	Set<String>Handler = driver.getWindowHandles();
+	Iterator<String>it = Handler.iterator();
+	String parentWinID = it.next();
+	System.out.println("parentWin ID" + parentWinID);
+	String childWinID = it.next();
+	System.out.println("childWin ID" + childWinID);
+	driver.switchTo().window(childWinID);
+	System.out.println("childWin Title" + driver.getTitle());
+	driver.close();
+	driver.switchTo().window(parentWinID);
+	System.out.println("parentWin Title" + driver.getTitle());
+	
+}
+	// to create report
+		public static void createreport() {
+			reports = new ExtentReports(reportFolder + new SimpleDateFormat("'SalesForceReport_'YYYYMMddHHmm'.html'").format(new Date()));
+		}
+
+		// To take screen shot
+		public static String takeSnapShot(WebDriver webdriver, String fileWithPath) throws IOException  {
+			TakesScreenshot srcShot = ((TakesScreenshot) driver);
+	        File srcFile = srcShot.getScreenshotAs(OutputType.FILE);
+	        String imagePath = reportFolder  + new SimpleDateFormat("'image1_'YYYYMMddHHmm'.png'").format(new Date());
+	        File destFile = new File(imagePath);
+	        FileUtils.copyFile(srcFile,destFile);
+	        return imagePath;
+		}
+		
+
+public static void TC08() throws Exception{
+	//Logger = reports.startTest("TrailV()");
+	//Logger.log(LogStatus.INFO, "Test run started");
+	
+	String[][] data = readXlData("/Users/rupali/Downloads/Selenium/XeroLogin.xls", "Sheet2");
+	String url = data[0][1];
+	String Email = data[1][1];
+	String Password = data[2][1];
+
+	System.setProperty("webdriver.chrome.driver", "/Users/rupali/Downloads/Selenium/chromedriver");
+	driver = new ChromeDriver();
+	driver.get(url);
+	driver.manage().window().maximize();
+
+	WebElement Log = driver.findElement(By.xpath("//a[@class='btn btn-tertiary-alt global-ceiling-bar-btn']"));
+	clickElement(Log, "Login");
+
+	//Logger.log(LogStatus.INFO, "login button clicked  successfully");
+	WebElement EmailAd = driver.findElement(By.xpath("//input[@id='email']"));
+	enterText(EmailAd, Email, "Email");
+	//Logger.log(LogStatus.INFO, "email entered successfully");
+	WebElement Pwd = driver.findElement(By.xpath("//input[@id='password']"));
+	enterText(Pwd, Password, "Password");
+	//Logger.log(LogStatus.INFO, "Password entered successfully");
+	WebElement LoginBtn = driver.findElement(By.xpath("//button[@id='submitButton']"));
+	clickElement(LoginBtn, "Login Button");
+	Thread.sleep(3000);
+	WebElement MyXero = driver.findElement(By.xpath("//div[@class='xrh-appbutton--body']"));
+	clickElement(MyXero, "My Xero");
+	Thread.sleep(3000);
+	WebElement MyXero1 = driver.findElement(By.xpath("//a[contains(text(),'My Xero')]"));
+	clickElement(MyXero1, "My Xero");
+	//Logger.log(LogStatus.INFO, "My Xero clicked successfully");
+	Thread.sleep(3000);
+	Set<String>Handler = driver.getWindowHandles();
+	Iterator<String>it = Handler.iterator();
+	String parentWinID = it.next();
+	System.out.println("parentWin ID" + parentWinID);
+	String childWinID = it.next();
+	System.out.println("childWin ID" + childWinID);
+	driver.switchTo().window(childWinID);
+	System.out.println("childWin Title" + driver.getTitle());
+	WebElement AddOrg = driver.findElement(By.partialLinkText("Add an organizati"));
+	clickElement(AddOrg, "Add organisation");
+	//Logger.log(LogStatus.INFO, "email entered successfully");
+	Thread.sleep(3000);
+	WebElement NameOrg = driver.findElement(By.cssSelector("input[data-automationid='organisation-name--input'][class='xui-textinput--input xui-textinput--input-medium']"));
+	
+	enterText(NameOrg, "self", "self");
+	
+	WebElement Country = driver.findElement(By.cssSelector("input[value='United States'][data-automationid='country-autocompleter--input']"));
+	clickElement(Country,  "Country");
+	
+	//Logger.log(LogStatus.INFO, "Country clicked  successfully");
+	WebElement TimeZ = driver.findElement(By.xpath("//div[@class='xui-autocompleter--trigger-focus']//div//div//div[@class='xui-iconwrapper xui-iconwrapper-medium']"));
+	clickElement(TimeZ,  "Time Zone");
+	//Logger.log(LogStatus.INFO, "Time Zone clicked  successfully");
+	
+	Thread.sleep(7000);
+	WebElement Busines = driver.findElement(By.xpath("/html[1]/body[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/div[4]/div[1]/div[1]/div[1]/div[2]/div[1]/input[1]"));
+	
+	enterText(Busines, "Accounting Services", "Accounting Services");
+	clickElement(Busines, "Accounting Services");
+	
+	Thread.sleep(5000);
+	//Logger.log(LogStatus.INFO, "Business clicked  successfully");(By.cssSelector("
+	
+}
+}
