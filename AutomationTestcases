@@ -1,0 +1,591 @@
+public class Automation extends ReusableMetXero {
+
+	public static void main(String[] args) throws Exception, InterruptedIOException {
+		createreport();
+		//InitializeDriver();
+		// SignUp();
+		 //Login1();
+		// IncorEmail();
+		// IncorPwd();
+		// ForgPwd();
+		// TabFunctions();
+		//Logout();
+		// Account();
+		// Profile();
+		// PrivacyP();
+		// Offer();
+		 //TC8BBuyN();
+		// TC8ATrailV();
+		// TC08();
+		// TC8C();
+		// TC8F();
+		 TC10();
+		reports.flush();
+	}
+
+	public static void SignUp() throws InterruptedException, IOException {
+		Logger = reports.startTest("SignUp");
+		Logger.log(LogStatus.INFO, "Test run started");
+		InitializeDriver();
+		String[][] data = readXlData("/Users/rupali/Downloads/Selenium/XeroExcel.xls", "Sheet1");
+		// String url = data[0][1];
+		String FirstName = data[1][1];
+		String LastName = data[2][1];
+		String EmailID = data[3][1];
+		String PhoneNum = data[4][1];
+		// To click on Free Trial
+		WebElement FreeTrial = driver.findElement(
+				By.xpath("//a[@class='btn btn-primary global-ceiling-bar-btn'][contains(text(),'Free trial')]"));
+		clickElement(FreeTrial, "Free Trial");
+		Thread.sleep(2000);
+		// to enter first name
+		WebElement FName = driver.findElement(By.xpath("//input[@name='FirstName']"));
+		enterText(FName, FirstName, "First Name");
+		Logger.log(LogStatus.INFO, "First Name successfully");
+		Thread.sleep(2000);
+		// to enter Last name
+		WebElement LName = driver.findElement(By.xpath("//input[@name='LastName']"));
+		enterText(LName, LastName, "Last Name");
+		Thread.sleep(2000);
+		Logger.log(LogStatus.INFO, "Last Name successfully");
+		// to enter Email.
+		WebElement Email = driver.findElement(By.xpath("//input[@name='EmailAddress']"));
+		enterText(Email, EmailID, "Email");
+		Thread.sleep(2000);
+		Logger.log(LogStatus.INFO, "email entered successfully");
+		// to enter Phone no
+		WebElement Phone = driver.findElement(By.xpath("//input[@name='PhoneNumber']"));
+		enterText(Phone, PhoneNum, "Phone number");
+		Thread.sleep(2000);
+		Logger.log(LogStatus.INFO, "Phone number successfully");
+		// to select Country
+		WebElement Country = driver
+				.findElement(By.xpath("//select[@name='LocationCode']//option[contains(text(),'United States')]"));
+		clickElement(Country, " Country");
+		Thread.sleep(60000);
+		Logger.log(LogStatus.INFO, "Country entered successfully");
+		// to Agree check box
+		WebElement Agree = driver.findElement(By.xpath("//input[@name='TermsAccepted']"));
+		clickElement(Agree, " Check box");
+		// get started btn.
+		Thread.sleep(3000);
+		Logger.log(LogStatus.INFO, "Check box clicked successfully");
+		WebElement GetSt = driver.findElement(By.xpath("//div[@class='signup-form-submit form-group']"));
+		clickElement(GetSt, " Get Started");
+		Thread.sleep(2000);
+		Logger.log(LogStatus.INFO, "Get Started clicked successfully");
+		WebElement success = driver.findElement(By.xpath("//h1[@class='title title-dynamic']"));
+
+		if (success.getText().equalsIgnoreCase("Rupa, an email is on its way")) {
+			Logger.log(LogStatus.PASS, "Rupa r signed up successfully");
+		} else {
+			Logger.log(LogStatus.FAIL, "Rupa r is not signed up");
+		}
+		Thread.sleep(2000);
+		Logger.log(LogStatus.PASS, "Phone number successfully");
+		driver.close();
+		reports.endTest(Logger);
+
+	}
+
+	public static void Login1() throws IOException, InterruptedException {
+		Logger = reports.startTest("Login1");
+		Logger.log(LogStatus.INFO, "Test run started");
+		InitializeDriver();
+		String[][] data = readXlData("/Users/rupali/Downloads/Selenium/xero1.xls", "Sheet1");
+		// String url = data[0][1];
+		String Email = data[1][1];
+		String Password = data[2][1];
+
+		WebElement Log = driver.findElement(By.xpath("//a[@class='btn btn-tertiary-alt global-ceiling-bar-btn']"));
+		clickElement(Log, "Login");
+
+		WebElement EmailAd = driver.findElement(By.xpath("//input[@id='email']"));
+		enterText(EmailAd, Email, "Email");
+
+		Logger.log(LogStatus.INFO, "email entered successfully");
+		WebElement Pwd = driver.findElement(By.xpath("//input[@id='password']"));
+		enterText(Pwd, Password, "Password");
+		Logger.log(LogStatus.INFO, "Password entered successfully");
+
+		WebElement LoginBtn = driver.findElement(By.xpath("//button[@id='submitButton']"));
+		clickElement(LoginBtn, "Login Button");
+		Logger.log(LogStatus.INFO, "Login btn clicked successfully");
+		Logger.log(LogStatus.PASS, "login successfully");
+
+		Thread.sleep(5000);
+		// to validate	
+		WebElement UserMenu = driver.findElement(By.xpath("//li[@class='xrh-addon xrh-addon-lastvisible']//div[@class='xrh-focusable--child xrh-iconwrapper']"));
+		clickElement(UserMenu, "UserMenu");
+		Logger.log(LogStatus.INFO, "User menu btn clicked successfully");
+		WebElement Profile1 = driver.findElement(By.xpath("//h4[@class='xrh-verticalmenuitem--heading']"));
+		if (Profile1.getText().equalsIgnoreCase("Rupali r")) {
+			Logger.log(LogStatus.PASS, "Rupali r logged successfully");
+		} else {
+			Logger.log(LogStatus.FAIL, "Rupali r is not logged");
+		}
+		System.out.println("Rupali r is logged in");
+		Logger.log(LogStatus.INFO, "profile btn clicked successfully");
+		Logger.log(LogStatus.PASS, "login valided");
+		Thread.sleep(2000);
+		takeSnapShot(driver, "‎⁨/iCloud Drive/Desktop⁩/login.png");
+		Logger.log(LogStatus.INFO, Logger.addScreenCapture("/Users/rupali/Downloads/Seleniump⁩/ScrShot.png"));
+		Logger.log(LogStatus.PASS, "login successfully");
+		driver.close();
+		reports.endTest(Logger);
+
+	}
+
+	public static void IncorEmail() throws InterruptedException, IOException {
+		Logger = reports.startTest("IncorEmail");
+		Logger.log(LogStatus.INFO, "Test run started");
+		InitializeDriver();
+		WebElement Log = driver.findElement(By.xpath("//a[@class='btn btn-tertiary-alt global-ceiling-bar-btn']"));
+		clickElement(Log, "Login");
+		WebElement EmailAd = driver.findElement(By.xpath("//input[@id='email']"));
+		enterText(EmailAd, "rar", "Email");
+		Logger.log(LogStatus.INFO, "invalid email entered successfully");
+		WebElement Pwd = driver.findElement(By.xpath("//input[@id='password']"));
+		enterText(Pwd, "45", "Password");
+		Logger.log(LogStatus.INFO, "invalid Password entered successfully");
+		WebElement LoginBtn = driver.findElement(By.xpath("//button[@id='submitButton']"));
+		clickElement(LoginBtn, "Login Button");
+		Logger.log(LogStatus.INFO, "Login btn clicked successfully");
+		takeSnapShot(driver, "‎⁨/iCloud Drive/Desktop⁩/login.png");
+		Logger.log(LogStatus.INFO, Logger.addScreenCapture("/Users/rupali/Downloads/Seleniump⁩/ScrShot.png"));
+		Logger.log(LogStatus.PASS, "Error msg is displayed");
+
+		driver.close();
+		reports.endTest(Logger);
+
+	}
+
+	public static void IncorPwd() throws InterruptedException, IOException {
+		Logger = reports.startTest("IncorPwd");
+		Logger.log(LogStatus.INFO, "Test run started");
+		InitializeDriver();
+		
+		WebElement Log = driver.findElement(By.xpath("//a[@class='btn btn-tertiary-alt global-ceiling-bar-btn']"));
+		clickElement(Log, "Login");
+		WebElement EmailAd = driver.findElement(By.xpath("//input[@id='email']"));
+		enterText(EmailAd, "raranade@gmail.com", "Email");
+		Logger.log(LogStatus.INFO, "valid Email entered successfully");
+		WebElement Pwd = driver.findElement(By.xpath("//input[@id='password']"));
+		enterText(Pwd, "45", "Password");
+		Logger.log(LogStatus.INFO, "invalid password entered successfully");
+		WebElement LoginBtn = driver.findElement(By.xpath("//button[@id='submitButton']"));
+		clickElement(LoginBtn, "Login Button");
+		Thread.sleep(2000);
+		Logger.log(LogStatus.INFO, "Login Button clicked successfully");
+		takeSnapShot(driver, "‎⁨/iCloud Drive/Desktop⁩/login.png");
+		Logger.log(LogStatus.INFO, Logger.addScreenCapture("/Users/rupali/Downloads/Seleniump⁩/ScrShot.png"));
+		WebElement error = driver.findElement(By.xpath("//p[contains(text(),'Your email or password is incorrect')]"));
+		if (error.getText().equalsIgnoreCase("Your email or password is incorrect")) {
+			Logger.log(LogStatus.PASS, "error msg displayed successfully");
+		} else {
+			Logger.log(LogStatus.FAIL, "error msg is not displayed");
+		}
+		Logger.log(LogStatus.PASS, "Error msg is displayed");
+		driver.close();
+		reports.endTest(Logger);
+	}
+
+	public static void ForgPwd() throws InterruptedException, IOException {
+		Logger = reports.startTest("ForgPwd");
+		Logger.log(LogStatus.INFO, "Test run started");
+		InitializeDriver();
+		WebElement Log = driver.findElement(By.xpath("//a[@class='btn btn-tertiary-alt global-ceiling-bar-btn']"));
+		clickElement(Log, "Login");
+		WebElement EmailAd = driver.findElement(By.xpath("//input[@id='email']"));
+		enterText(EmailAd, "raranade@gmail.com", "Email");
+		Logger.log(LogStatus.INFO, "valid Email entered successfully");
+		WebElement Pwd = driver.findElement(By.xpath("//input[@id='password']"));
+		enterText(Pwd, "", "Password");
+		Thread.sleep(3000);
+		Logger.log(LogStatus.INFO, "password field kept blank");
+		WebElement forgot = driver.findElement(By.xpath("//a[@class='forgot-password-advert']"));
+		forgot.click();
+		Thread.sleep(3000);
+		Logger.log(LogStatus.INFO, "forgot link clicked successfully");
+		
+		WebElement Email1 = driver.findElement(By.xpath("//input[@id='UserName']"));
+		 Email1.sendKeys("rupalranade@gmail.com");
+		 Thread.sleep(3000);
+		 Logger.log(LogStatus.INFO, "email entered successfully");
+		 WebElement Send = driver.findElement(By.xpath("//span[@class='text']"));
+		 Send.click();
+		 Thread.sleep(3000);
+		 Logger.log(LogStatus.INFO, "send Button clicked successfully");
+		 WebElement val = driver.findElement(By.xpath("//p[contains(text(),'A link to reset your password has been sent to:')]"));
+		 Thread.sleep(3000);
+			System.out.println(val.getText());
+		Logger.log(LogStatus.INFO, Logger.addScreenCapture("/Users/rupali/Downloads/Seleniump⁩/ScrShot.png"));
+		Logger.log(LogStatus.PASS, "A link to reset your password has been sent successfully");
+		driver.close();
+		reports.endTest(Logger);
+	}
+
+	public static void TabFunctions() throws InterruptedException, IOException {
+		Logger = reports.startTest("TabFunctions");
+		Logger.log(LogStatus.INFO, "Test run started");
+		InitializeDriver();
+		Login();
+		// To Click on Dashborad
+		WebElement DashBrd = driver
+				.findElement(By.xpath("//a[@class='xrh-focusable xrh-tab--body xrh-tab--body-is-selected']"));
+		clickElement(DashBrd, " Dash Board");
+		Thread.sleep(3000);
+		Logger.log(LogStatus.INFO, "Dash Board clicked successfully");
+		WebElement Account = driver.findElement(By.xpath("//button[contains(text(),'Accounting')]"));
+		clickElement(Account, " Accounting");
+		Thread.sleep(3000);
+		Logger.log(LogStatus.INFO, "Accounting clicked successfully");
+		WebElement Contacts = driver.findElement(By.xpath("//button[contains(text(),'Contacts')]"));
+		clickElement(Contacts, " Contacts");
+		Thread.sleep(3000);
+		Logger.log(LogStatus.INFO, "Contacts clicked successfully");
+		WebElement TekTab = driver.findElement(By.xpath("//span[@class='xrh-appbutton--text']"));
+		clickElement(TekTab, " Tek Tab");
+		Thread.sleep(3000);
+		Logger.log(LogStatus.INFO, "Tek Tab clicked successfully");
+		WebElement Files = driver.findElement(By.xpath("//a[contains(text(),'Files')]"));
+		clickElement(Files, " Files");
+		Thread.sleep(3000);
+		Logger.log(LogStatus.INFO, "Files clicked successfully");
+		WebElement New = driver
+				.findElement(By.xpath("/html[1]/body[1]/div[1]/header[1]/div[1]/ol[2]/li[1]/button[1]/div[1]/*"));
+		clickElement(New, " New");
+		Thread.sleep(3000);
+		Logger.log(LogStatus.INFO, "New clicked successfully");
+		WebElement Search = driver.findElement(By.xpath(
+				"//li[@class='xrh-addon xrh-addon-alwaysvisible']//div[@class='xrh-focusable--child xrh-iconwrapper']"));
+		clickElement(Search, " Search icon");
+		Thread.sleep(3000);
+		Logger.log(LogStatus.INFO, "Search icon clicked successfully");
+		WebElement NotifCn = driver.findElement(By.xpath("//li[3]//button[1]//div[1]"));
+		clickElement(NotifCn, " NotifCn icon");
+		Thread.sleep(3000);
+		Logger.log(LogStatus.INFO, "NotifCn icon clicked successfully");
+		WebElement Help = driver
+				.findElement(By.xpath("/html[1]/body[1]/div[1]/header[1]/div[1]/ol[2]/li[4]/button[1]/div[1]/*"));
+		clickElement(Help, " Help icon");
+		Thread.sleep(3000);
+		Logger.log(LogStatus.INFO, "Help icon clicked successfully");
+		Logger.log(LogStatus.PASS, "Tab functions on dashboard are working successfully");
+		driver.close();
+		reports.endTest(Logger);
+	}
+
+	public static void Logout() throws InterruptedException, IOException {
+		Logger = reports.startTest("Logout");
+		Logger.log(LogStatus.INFO, "Test run started");
+		InitializeDriver();
+		Login();
+		// to validate
+		Thread.sleep(2000);
+		Thread.sleep(2000);
+		WebElement UserMenu = driver.findElement(By.xpath("//li[@class='xrh-addon xrh-addon-lastvisible']//div[@class='xrh-focusable--child xrh-iconwrapper']"));		
+		clickElement(UserMenu, "UserMenu");
+		Thread.sleep(2000);
+		Logger.log(LogStatus.INFO, "usermenu  clicked successfully");
+		WebElement LogOut = driver.findElement(By.xpath(
+				"//div[@class='xrh-dropdown-layout xrh-addon--dropdown xrh-dropdown-is-open xrh-dropdown-is-opening xrh-dropdown-positionright']//a[@class='xrh-verticalmenuitem--body'][contains(text(),'Log out')]"));
+		clickElement(LogOut, "Log out");
+		Thread.sleep(4000);
+		Logger.log(LogStatus.INFO, "Logout btn clicked successfully");
+		Logger.log(LogStatus.PASS, "Logout has been done successfully");
+		driver.close();
+		reports.endTest(Logger);
+	}
+
+	public static void Account() throws InterruptedException, IOException {
+		Logger = reports.startTest("Account");
+		Logger.log(LogStatus.INFO, "Test run started");
+		InitializeDriver();
+		Login();
+		Thread.sleep(2000);
+		WebElement UserMenu = driver.findElement(By.xpath("//li[@class='xrh-addon xrh-addon-lastvisible']//div[@class='xrh-focusable--child xrh-iconwrapper']"));
+		clickElement(UserMenu, "UserMenu");
+		Thread.sleep(4000);
+		Logger.log(LogStatus.INFO, "UserMenu clicked successfully");
+		WebElement Account = driver.findElement(By.xpath(
+				"//div[@class='xrh-dropdown-layout xrh-addon--dropdown xrh-dropdown-is-open xrh-dropdown-is-opening xrh-dropdown-positionright']//a[@class='xrh-verticalmenuitem--body'][contains(text(),'Account')]"));
+		clickElement(Account, "Account");
+		Thread.sleep(2000);
+		Logger.log(LogStatus.INFO, "Account clicked successfully");
+		WebElement TimeZ = driver.findElement(By.xpath("//div[@id='ext-gen1153']"));
+		clickElement(TimeZ, "Time Zone");
+		Thread.sleep(2000);
+		
+		WebElement Zone = driver.findElement(By.xpath("//input[@id='field-wordmatchcombo-1041-inputEl']"));
+		Zone.sendKeys("(UTC-08:00) Pacific Time (US & Canada)");
+		Thread.sleep(2000);
+		Logger.log(LogStatus.INFO, "Time Zone entered successfully");
+		WebElement Save = driver.findElement(By.xpath("//div[@id='button-1086']"));
+		clickElement(Save, "Save");
+		Thread.sleep(3000);
+		Logger.log(LogStatus.INFO, "Save clicked successfully");
+		WebElement error = driver.findElement(By.xpath("//p[contains(text(),'Your settings have been updated.')]"));
+	
+		if (error.getText().equalsIgnoreCase("Your settings have been updated.")){
+			Logger.log(LogStatus.PASS, "updated msg displayed successfully");
+		} else {
+			Logger.log(LogStatus.FAIL, "updated msg is not displayed");
+		}
+		Logger.log(LogStatus.PASS, "Account setting updated successfully");
+		driver.close();
+		reports.endTest(Logger);
+	}
+
+	public static void Profile() throws InterruptedException, IOException {
+		Logger = reports.startTest("Profile");
+		Logger.log(LogStatus.INFO, "Test run started");
+		InitializeDriver();
+		//Login();
+		String[][] data = readXlData("/Users/rupali/Downloads/Selenium/xero1.xls", "Sheet1");
+		// String url = data[0][1];
+		String Email = data[1][1];
+		String Password = data[2][1];
+		WebElement Log = driver.findElement(By.xpath("//a[@class='btn btn-tertiary-alt global-ceiling-bar-btn']"));
+		clickElement(Log, "Login");
+
+		WebElement EmailAd = driver.findElement(By.xpath("//input[@id='email']"));
+		enterText(EmailAd, Email, "Email");
+
+		Logger.log(LogStatus.INFO, "email entered successfully");
+		WebElement Pwd = driver.findElement(By.xpath("//input[@id='password']"));
+		enterText(Pwd, Password, "Password");
+		Logger.log(LogStatus.INFO, "Password entered successfully");
+
+		WebElement LoginBtn = driver.findElement(By.xpath("//button[@id='submitButton']"));
+		clickElement(LoginBtn, "Login Button");
+		Logger.log(LogStatus.INFO, "Login btn clicked successfully");
+		takeSnapShot(driver, "‎⁨/iCloud Drive/Desktop⁩/login.png");
+		Logger.log(LogStatus.INFO, Logger.addScreenCapture("/Users/rupali/Downloads/Seleniump⁩/ScrShot.png"));
+		Logger.log(LogStatus.PASS, "login successfully");
+		// to validate
+		Thread.sleep(2000);
+		Thread.sleep(2000);
+
+		WebElement UserMenu = driver.findElement(By.xpath("//li[@class='xrh-addon xrh-addon-lastvisible']//div[@class='xrh-focusable--child xrh-iconwrapper']"));
+		clickElement(UserMenu, "UserMenu");
+		Thread.sleep(4000);
+		Logger.log(LogStatus.INFO, "usermenu  clicked successfully");
+		WebElement Profile = driver
+				.findElement(By.xpath("//h4[@class='xrh-verticalmenuitem--heading'][contains(text(),'rupali r')]"));
+		clickElement(Profile, "Edit Profile");
+		Thread.sleep(2000);
+		Logger.log(LogStatus.INFO, "Edit Profile  clicked successfully");
+		WebElement UploadIM = driver.findElement(By.xpath("//div[@id='button-1041']"));
+		clickElement(UploadIM, "Upload Image");
+		Thread.sleep(2000);
+		Logger.log(LogStatus.INFO, "Upload Image clicked successfully");
+		WebElement Browse = driver.findElement(By.xpath("//input[@id='filefield-1174-button-fileInputEl']"));
+		Browse.sendKeys("/Users/rupali/Desktop/city-shaper_0.jpeg");
+		clickElement(Browse, "Browse");
+		Thread.sleep(2000);
+		Logger.log(LogStatus.INFO, "browse clicked successfully");
+		WebElement Upload = driver.findElement(By.xpath("//span[@id='button-1178-btnInnerEl']"));
+		clickElement(Upload, "Upload");
+		Logger.log(LogStatus.INFO, "upload btn clicked successfully");
+		Logger.log(LogStatus.PASS, "photo has been uploaded successfully");
+		driver.close();
+		reports.endTest(Logger);
+	}
+
+	public static void PrivacyP() throws InterruptedException, IOException {
+		Logger = reports.startTest("PrivacyP");
+		Logger.log(LogStatus.INFO, "Test run started");
+		InitializeDriver();
+		WebElement FreeTrial = driver.findElement(
+				By.xpath("//a[@class='btn btn-primary global-ceiling-bar-btn'][contains(text(),'Free trial')]"));
+		clickElement(FreeTrial, " Free Trial");
+		Logger.log(LogStatus.INFO, "Free Trial clicked successfully");
+		Thread.sleep(2000);
+		WebElement TermsUse = driver.findElement(By.xpath("//a[contains(text(),'terms')]"));
+		clickElement(TermsUse, " Terms of Use");
+		Thread.sleep(4000);
+		Logger.log(LogStatus.INFO, "Terms of Use link clicked successfully");
+		// WindowHandler();
+		WebElement Privacy = driver.findElement(By.xpath("//a[contains(text(),'Privacy')]"));
+		clickElement(Privacy, "Privacy");
+		Logger.log(LogStatus.INFO, "Privacy link clicked successfully");
+		String Title = driver.getCurrentUrl();
+		System.out.println(Title);
+		if (Title.matches("https://www.xero.com/us/about/privacy/")) {
+			Logger.log(LogStatus.PASS, "A new Privacy policy web page opened successfully");
+		} else {
+			Logger.log(LogStatus.FAIL, "A new Privacy policy web page is not opened");
+		}
+		Logger.log(LogStatus.PASS, "The Privacy policy test case passed");
+		driver.close();
+		reports.endTest(Logger);
+	}
+
+	public static void Offer() throws InterruptedException, IOException {
+		Logger = reports.startTest("Offer");
+		Logger.log(LogStatus.INFO, "Test run started");
+		InitializeDriver();
+		WebElement FreeTrial = driver.findElement(
+				By.xpath("//a[@class='btn btn-primary global-ceiling-bar-btn'][contains(text(),'Free trial')]"));
+		clickElement(FreeTrial, " Free Trial");
+		Thread.sleep(2000);
+		Logger.log(LogStatus.INFO, "Free Trial clicked successfully");
+		WebElement Offer = driver.findElement(By.xpath("//a[contains(text(),'offer details')]"));
+		clickElement(Offer, " Offer Details");
+		Logger.log(LogStatus.INFO, "Offer Details clicked successfully");
+		Set<String> Handler = driver.getWindowHandles();
+		Iterator<String> it = Handler.iterator();
+		String parentWinID = it.next();
+		System.out.println("parentWin ID" + parentWinID);
+		String childWinID = it.next();
+		System.out.println("childWin ID" + childWinID);
+		driver.switchTo().window(childWinID);
+		String title = driver.getCurrentUrl();
+		System.out.println("childWin Title" + driver.getCurrentUrl());
+		Thread.sleep(7000);
+		Logger.log(LogStatus.INFO, "Offer Details link clicked successfully");
+
+		if (title.matches("https://www.xero.com/us/signup/offer-details/")) {
+			Logger.log(LogStatus.PASS, "A new Offer Details web page opened successfully");
+		} else {
+			Logger.log(LogStatus.FAIL, "A new Offer Details web page is not opened");
+		}
+		Logger.log(LogStatus.PASS, "The offer test case passed");
+		driver.close();
+		reports.endTest(Logger);
+	}
+
+	public static void TC8ATrailV() throws Exception {
+		Logger = reports.startTest("TC8ATrailV");
+		Logger.log(LogStatus.INFO, "Test run started");
+		TC08();
+		WebElement StartTL = driver.findElement(By.xpath(
+				"//button[@class='xui-button xui-actions--primary xui-actions--button-spacing xui-button-main xui-button-medium']"));
+		clickElement(StartTL, "Start Trial");
+		Logger.log(LogStatus.INFO, "Start Trial clicked successfully");
+		// takeSnapShot(driver,"‎⁨/iCloud Drive/Desktop⁩/login.png");
+		// Logger.addScreenCapture("/Users/rupali/Downloads/Seleniump⁩/ScrShot.png"));
+		Logger.log(LogStatus.PASS, "A free trial of self started");
+		Thread.sleep(3000);
+		driver.close();
+		reports.endTest(Logger);
+	}
+
+	public static void TC8BBuyN() throws Exception {
+		Logger = reports.startTest("TC8BBuyN");
+		Logger.log(LogStatus.INFO, "Test run started");
+		TC08();
+		WebElement BuyN = driver.findElement(
+				By.xpath("//button[@class='xui-button xui-actions--secondary xui-button-standard xui-button-medium']"));
+		clickElement(BuyN, "Buy Now");
+		Logger.log(LogStatus.INFO, "Buy Now btn clicked successfully");
+		Logger.log(LogStatus.PASS, "Subscription and Billing page	is opened successfully");
+		driver.close();
+		reports.endTest(Logger);
+	}
+
+	public static void TC8C() throws Exception {
+		Logger = reports.startTest("TC8C");
+		Logger.log(LogStatus.INFO, "Test run started");
+		TC08();
+		WebElement BuyN = driver.findElement(
+				By.xpath("//button[@class='xui-button xui-actions--secondary xui-button-standard xui-button-medium']"));
+		clickElement(BuyN, "Buy Now");
+		// Logger.log(LogStatus.INFO, "Start Trial clicked successfully");
+		Thread.sleep(5000);
+		WebElement BillBtn = driver.findElement(By.xpath("/html[1]/body[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/div[4]/div[1]/button[1]/span[1]"));
+		clickElement(BillBtn, " select billing account");
+		// Logger.log(LogStatus.INFO, "select billing account clicked successfully");
+		Thread.sleep(3000);
+		WebElement Street = driver.findElement(By.xpath("//input[@id='contactAddress']"));
+		enterText(Street, "3450 granada ave", "Street Address sucessfully entered");
+		Logger.log(LogStatus.INFO, "Street Address sucessfully entered");
+		WebElement City = driver.findElement(By.xpath("//input[@id='contactCity']"));
+		enterText(City, "santa clara", "city sucessfully entered");
+		Logger.log(LogStatus.INFO, "city sucessfully entered");
+		WebElement State = driver.findElement(By.xpath(
+				"//div[@id='postalAddress']//button[@class='xui-button xui-select--button xui-button-standard']"));
+		enterText(State, "CA", "state sucessfully entered");
+		Logger.log(LogStatus.INFO, "state sucessfully entered");
+		WebElement Zip = driver.findElement(By.xpath("//input[@id='contactPostalCode']"));
+		enterText(Zip, "95051", "Zip code sucessfully entered");
+		Logger.log(LogStatus.INFO, "Zip code sucessfully entered");
+		WebElement Continue = driver.findElement(By.xpath("//button[@id='stepAccountCreate']"));
+		clickElement(Continue, "Continue");
+		Logger.log(LogStatus.INFO, "Continue btn clicked successfully");
+		Logger.log(LogStatus.PASS, "test case passed");
+		driver.close();
+		reports.endTest(Logger);
+	}
+
+	public static void TC8F() throws Exception {
+		Logger = reports.startTest("TC8F");
+		Logger.log(LogStatus.INFO, "Test run started");
+		TC08();
+		WebElement QBook = driver.findElement(By.xpath("//div[@class='xui-accordiontrigger--headings']"));
+		clickElement(QBook, "Quick Books");
+		Thread.sleep(3000);
+		Logger.log(LogStatus.INFO, "Quick Books clicked successfully");
+		WebElement QBook1 = driver.findElement(By.xpath("//div[@class='xui-styledcheckboxradio--checkbox xui-styledcheckboxradio--checkbox-small']"));
+		clickElement(QBook1, "Quick Books checkbox");
+		Logger.log(LogStatus.INFO, "Quick Books checkbox clicked successfully");
+		WebElement Continue = driver.findElement(
+				By.xpath("//button[@class='xui-button xui-actions--secondary xui-button-main xui-button-medium']"));
+		clickElement(Continue, "Continue button");
+		Logger.log(LogStatus.INFO, "Continue btn clicked successfully");
+		WebElement org = driver.findElement(By.xpath("//input[@id='text-1024-inputEl']"));
+		org.sendKeys("self");
+		Thread.sleep(3000);
+		Logger.log(LogStatus.INFO, "organnization name entered successfully");
+		WebElement Move = driver.findElement(By.xpath("//a[@id='conversionLink']"));
+		clickElement(Move, "Move for Quick Books for free.");
+		Thread.sleep(3000);
+		Logger.log(LogStatus.INFO, "Move for Quick Books for free clicked successfully");
+		WebElement check = driver.findElement(By.xpath("//input[@id='conversionCheckbox-inputEl']"));
+		clickElement(check, "checkbox.");
+		Thread.sleep(3000);
+		Logger.log(LogStatus.INFO, "checkbox clicked successfully");
+		WebElement cont = driver.findElement(By.xpath("//a[@id='simplebutton-1031']"));
+		clickElement(cont, "continue button");
+		Thread.sleep(3000);
+		Logger.log(LogStatus.INFO, "Continue btn clicked successfully");
+		Logger.log(LogStatus.PASS, "The user able to see Quick books file conversion.");
+		driver.close();
+		reports.endTest(Logger);
+	}
+
+	public static void TC10() throws Exception {
+		Logger = reports.startTest("TC10");
+		Logger.log(LogStatus.INFO, "Test run started");
+		InitializeDriver();
+		Login();
+		Thread.sleep(3000);
+		WebElement Business = driver.findElement(By.xpath("//button[contains(text(),'Business')]"));
+		clickElement(Business, " Business button");
+		Thread.sleep(3000);
+		Logger.log(LogStatus.INFO, "Business button clicked successfully");
+		WebElement Bills = driver
+				.findElement(By.xpath("//a[@ href='https://go.xero.com/AccountsPayable/Search.aspx']"));
+		clickElement(Bills, " Bills to pay");
+		Thread.sleep(3000);
+		Logger.log(LogStatus.INFO, "Bills to pay clicked successfully");
+		WebElement CloseWin = driver.findElement(By.id("toutCloseButton"));
+		clickElement(CloseWin, " Close Popup Window");
+		
+		WebElement Paid = driver.findElement(By.xpath("//a[contains(text(),'Paid')]"));
+		clickElement(Paid, " Paid");
+		Thread.sleep(3000);
+		Logger.log(LogStatus.INFO, "Paid clicked successfully");
+		WebElement Repeat = driver.findElement(By.xpath("//a[@ href='/AccountsPayable/SearchRepeating.aspx']"));
+		clickElement(Repeat, " Repeating");
+		Thread.sleep(3000);
+		Logger.log(LogStatus.INFO, "Repeating clicked successfully");
+		WebElement All = driver.findElement(By.xpath("//ul[@class='group']//a[contains(text(),'All')]"));
+		clickElement(All, " All");
+		Logger.log(LogStatus.INFO, "All btn clicked successfully");
+		Logger.log(LogStatus.PASS, "User can see information for all bills successfully");
+		driver.close();
+		reports.endTest(Logger);
+	}
+}
